@@ -1,6 +1,9 @@
+var users = [];
+var a = 0;
+var b = 10;
 document.addEventListener("DOMContentLoaded", function () {
   //padd
-  createAllUsers();
+  usr = createAllUsers();
   document.getElementById("newUser").addEventListener("click", function () {
     document.getElementById("overlay").style.display = "block";
   });
@@ -17,24 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
         method: "POST",
         body: formData,
       }).then((data) => {
-        console.log(data);
         document.getElementById("overlay").style.display = "none";
         createAllUsers();
       });
     });
 });
 
-function createAllUsers() {
-  document.querySelector("#userlist").innerHTML = "";
-  fetch("/get_usr/")
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((user) => {
-        createUserList(user);
-      });
-    });
-}
-
+// Single user
 function createUserList(user) {
   let tr = document.createElement("tr");
   tr.innerHTML = `
@@ -109,104 +101,42 @@ function createUserList(user) {
                     `;
   document.querySelector("#userlist").appendChild(tr);
 }
+function createPagination(currentPageIndex = 0) {
+  let ul = document.querySelector(".pagination");
+  ul.innerHTML = ""; 
+  for (let i = 0; i < Math.ceil(users.length / 10); i++) {
+    let li = document.createElement("li");
+    li.classList.add("page-item");
+    if (i === currentPageIndex) {
+      li.classList.add("active"); 
+    }
+    li.innerHTML = `<a class="page-link" href="#" data-start="${
+      i * 10
+    }" onclick="changePage(event)">${i + 1}</a>`;
+    ul.appendChild(li);
+  }
+}
 
-/*
-  .overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 10000;
-  }
-  .popup{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 30px;
-    width:60vw;
-    z-index: 50000;
-    
-  }
-  .modal-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  .modal-header h5{
-    margin: 0;
-  }
-  .modal-header button{
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  .modal-body{
-    padding: 20px 0;
-  }
-  .modal-body .form-group{
-    margin-bottom: 20px;
-  }
-  .modal-body .form-group label{
-    margin-bottom: 10px;
-  }
-  .modal-body .form-group input{
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-  }
-  .modal-body .form-group input:focus{
-    outline: none;
-  }
-  .modal-body .form-group button{
-    padding: 10px 20px;
-    border: none;
-    background: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .modal-body .form-group button:hover{
-    background: #0056b3;
-  }
-  .modal-body .form-group button:focus{
-    outline: none;
-  }
-  .modal-body .form-group button:active{
-    transform: scale(0.98);
-  }
-  .modal-body .form-group button[type="submit"]{
-    background: #28a745;
-  }
-  .modal-body .form-group button[type="submit"]:hover{
-    background: #218838;
-  }
-  .modal-body .form-group button[type="submit"]:focus{
-    outline: none;
-  }
-  .modal-body .form-group button[type="submit"]:active{
-    transform: scale(0.98);
-  }
-  .modal-body .form-group button[type="submit"]:disabled{
-    background: #6c757d;
-    cursor: not-allowed;
-  }
-  .modal-body .form-group button[type="submit"]:disabled:hover{
-    background: #5a6268;
-  }
-  .modal-body .form-group button[type="submit"]:disabled:focus{
-    outline: none;
-  }
-  .modal-body .form-group button[type="submit"]:disabled:active{
-    transform: scale(0.98);
-  }
+function changePage(event) {
+  event.preventDefault();
+  a = parseInt(event.target.getAttribute("data-start"));
+  b = a + 10 < users.length ? a + 10 : users.length;
 
-*/
+  let currentPageIndex = a / 10; 
+  createAllUsers(currentPageIndex); 
+}
+
+function createAllUsers(currentPageIndex = 0) {
+  document.querySelector("#userlist").innerHTML = "";
+  fetch("/get_usr/")
+    .then((response) => response.json())
+    .then((data) => {
+      users = data;
+      for (let i = a; i < b && i < users.length; i++) {
+        if (users[i]) {
+          createUserList(users[i]);
+        }
+      }
+      createPagination(currentPageIndex); 
+    });
+}
