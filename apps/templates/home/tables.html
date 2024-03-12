@@ -1,24 +1,270 @@
 {% extends 'layouts/base.html' %} {% block title %} Tables {% endblock title %}
 {% block content %}
+<style>
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.744);
+    display: none;
+    z-index: 10000;
+  }
+
+  .popup {
+    position: fixed;
+    top: 50%;
+    border-radius: 0.375rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 30px;
+    width: 60vw;
+    height: 80vh;
+    overflow: auto;
+
+    z-index: 50000;
+    /* display: none; */
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .modal-header h5 {
+    margin: 0;
+  }
+
+  .modal-header button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .modal-body {
+    padding: 20px 0;
+  }
+
+  .modal-body .form-group {
+    margin-bottom: 20px;
+  }
+
+  .modal-body .form-group label {
+    margin-bottom: 10px;
+    color: #494646;
+  }
+
+  .modal-body .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+  }
+
+  .modal-body .form-group input:focus {
+    outline: none;
+    color: #172b4d;
+  }
+
+  .modal-body .form-group button {
+    padding: 10px 20px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .modal-body .form-group button:hover {
+    background: #0056b3;
+  }
+
+  .modal-body .form-group button:focus {
+    outline: none;
+  }
+
+  .modal-body .form-group button:active {
+    transform: scale(0.98);
+  }
+
+  .modal-body .form-group button[type="submit"] {
+    background: #28a745;
+  }
+
+  .modal-body .form-group button[type="submit"]:hover {
+    background: #218838;
+  }
+
+  .modal-body .form-group button[type="submit"]:focus {
+    outline: none;
+  }
+
+  .modal-body .form-group button[type="submit"]:active {
+    transform: scale(0.98);
+  }
+
+  .modal-body .form-group button[type="submit"]:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .modal-body .form-group button[type="submit"]:disabled:hover {
+    background: #5a6268;
+  }
+
+  .modal-body .form-group button[type="submit"]:disabled:focus {
+    outline: none;
+  }
+
+  .modal-body .form-group button[type="submit"]:disabled:active {
+    transform: scale(0.98);
+  }
+</style>
+<div class="overlay" id="overlay">
+  <div class="popup" id="popup-1">
+    <div class="content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add New Client</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          id="close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addUserForm" method="post" action="/create_usr/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="Enter Username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              placeholder="Enter Name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="Enter Email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input
+              type="text"
+              class="form-control"
+              id="phone"
+              name="phone"
+              placeholder="Enter Phone"
+            />
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="address"
+              name="address"
+              placeholder="Enter Address"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input
+              type="text"
+              class="form-control"
+              id="country"
+              name="country"
+              placeholder="Enter Country"
+            />
+          </div>
+          <div class="form-group">
+            <label for="status">Status</label>
+            <input
+              type="text"
+              class="form-control"
+              id="status"
+              name="status"
+              placeholder="Enter Status"
+            />
+          </div>
+          <div class="form-group">
+            <label for="visaType">Visa Type</label>
+            <input
+              type="text"
+              class="form-control"
+              id="visaType"
+              name="visaType"
+              placeholder="Enter Visa Type"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Enter Password"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="header bg-primary pb-6">
   <div class="container-fluid">
     <div class="header-body">
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
-          <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+          <h6 class="h2 text-white d-inline-block mb-0">Clients</h6>
           <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
             <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
               <li class="breadcrumb-item">
                 <a href="#"><i class="fas fa-home"></i></a>
               </li>
-              <li class="breadcrumb-item"><a href="#">Tables</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Tables</li>
+              <li class="breadcrumb-item"><a href="#">Clients</a></li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Clients
+              </li>
             </ol>
           </nav>
         </div>
         <div class="col-lg-6 col-5 text-right">
-          <a href="#" class="btn btn-sm btn-neutral">New</a>
+          <a href="#" class="btn btn-sm btn-neutral" id="newUser">New</a>
           <a href="#" class="btn btn-sm btn-neutral">Filters</a>
         </div>
       </div>
@@ -33,136 +279,30 @@
     <div class="col">
       <div class="card bg-default shadow">
         <div class="card-header bg-transparent border-0">
-          <h3 class="text-white mb-0">Dark table</h3>
+          <h3 class="text-white mb-0">Client List</h3>
         </div>
         <div class="table-responsive">
           <table class="table align-items-center table-dark table-flush">
             <thead class="thead-dark">
               <tr>
-                <th scope="col" class="sort" data-sort="name">Project</th>
-                <th scope="col" class="sort" data-sort="budget">Budget</th>
+                <th scope="col" class="sort" data-sort="name">Name</th>
+                <th scope="col" class="sort" data-sort="budget">Country</th>
                 <th scope="col" class="sort" data-sort="status">Status</th>
-                <th scope="col">Users</th>
+                <th scope="col">Visa Type</th>
                 <th scope="col" class="sort" data-sort="completion">
                   Completion
                 </th>
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody class="list">
+            <tbody class="list" id="userlist">
               <!-- Dark Table -->
-              <tr>
-                <th scope="row">
-                  <div class="media align-items-center">
-                    <a href="#" class="avatar rounded-circle mr-3">
-                      <img
-                        alt="Image placeholder"
-                        src="/static/assets/img/theme/bootstrap.jpg"
-                      />
-                    </a>
-                    <div class="media-body">
-                      <span class="name mb-0 text-sm">Argon Design System</span>
-                    </div>
-                  </div>
-                </th>
-                <td class="budget">$2500 USD</td>
-                <td>
-                  <span class="badge badge-dot mr-4">
-                    <i class="bg-warning"></i>
-                    <span class="status">pending</span>
-                  </span>
-                </td>
-                <td>
-                  <div class="avatar-group">
-                    <a
-                      href="#"
-                      class="avatar avatar-sm rounded-circle"
-                      data-toggle="tooltip"
-                      data-original-title="Ryan Tompson"
-                    >
-                      <img
-                        alt="Image placeholder"
-                        src="/static/assets/img/theme/team-1.jpg"
-                      />
-                    </a>
-                    <a
-                      href="#"
-                      class="avatar avatar-sm rounded-circle"
-                      data-toggle="tooltip"
-                      data-original-title="Romina Hadid"
-                    >
-                      <img
-                        alt="Image placeholder"
-                        src="/static/assets/img/theme/team-2.jpg"
-                      />
-                    </a>
-                    <a
-                      href="#"
-                      class="avatar avatar-sm rounded-circle"
-                      data-toggle="tooltip"
-                      data-original-title="Alexander Smith"
-                    >
-                      <img
-                        alt="Image placeholder"
-                        src="/static/assets/img/theme/team-3.jpg"
-                      />
-                    </a>
-                    <a
-                      href="#"
-                      class="avatar avatar-sm rounded-circle"
-                      data-toggle="tooltip"
-                      data-original-title="Jessica Doe"
-                    >
-                      <img
-                        alt="Image placeholder"
-                        src="/static/assets/img/theme/team-4.jpg"
-                      />
-                    </a>
-                  </div>
-                </td>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <span class="completion mr-2">60%</span>
-                    <div>
-                      <div class="progress">
-                        <div
-                          class="progress-bar bg-warning"
-                          role="progressbar"
-                          aria-valuenow="60"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style="width: 60%"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-right">
-                  <div class="dropdown">
-                    <a
-                      class="btn btn-sm btn-icon-only text-light"
-                      href="#"
-                      role="button"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <i class="fas fa-ellipsis-v"></i>
-                    </a>
-                    <div
-                      class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
-                    >
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
-        <div class="card-footer py-4">
+
+        <!-- card footer -->
+        <div class="card-footer py-4" style="background-color: #172b4d">
           <nav aria-label="...">
             <ul class="pagination justify-content-end mb-0">
               <li class="page-item disabled">
@@ -194,7 +334,6 @@
       </div>
     </div>
   </div>
-  
 
   {% include "includes/footer.html" %}
 </div>
@@ -202,4 +341,6 @@
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script src="/static/assets/js/userlist.js"></script>
+{% endblock javascripts %}
