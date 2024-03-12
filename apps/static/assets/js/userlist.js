@@ -4,64 +4,66 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const setupEventListeners = () => {
+  const overlay = document.getElementById("overlay");
+  const popupAdd = document.getElementById("popup-1");
+  const popupEdit = document.getElementById("popup-2");
+
   document.getElementById("newUser").addEventListener("click", () => {
-    toggleOverlay("block");
-    toggleEditPopup("none");
-    toggleAddPopup("block");
+    toggleOverlayDisplay(true);
+    toggleDisplay(popupEdit, false);
+    toggleDisplay(popupAdd, true);
   });
 
-  document.querySelectorAll(".close").forEach((el) => {
-    el.addEventListener("click", () => {
-      toggleOverlay("none");
-      toggleAddPopup("none");
-      toggleEditPopup("none");
-    });
-  });
+  document
+    .querySelectorAll(".close")
+    .forEach((el) =>
+      el.addEventListener("click", () => toggleOverlayDisplay(false))
+    );
 
-  document.querySelector("#addUserForm").addEventListener("submit", (e) => {
+  const formSubmitHandler = (url, method) => (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    fetch("/create_usr/", {
-      method: "POST",
-      body: formData,
-    }).then(() => {
-      toggleOverlay("none");
+    const fetchOptions = {
+      method,
+      body: url.includes("update")
+        ? JSON.stringify(Object.fromEntries(formData))
+        : formData,
+    };
+    if (url.includes("update"))
+      fetchOptions.headers = { "Content-Type": "application/json" };
+
+    fetch(url, fetchOptions).then(() => {
+      toggleOverlayDisplay(false);
       createAllUsers();
     });
-  });
+  };
 
-  document.querySelector("#editUserForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    fetch("/update_usr/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(Object.fromEntries(formData)),
-    }).then(() => {
-      toggleOverlay("none");
-      createAllUsers();
-    });
-  });
+  document
+    .querySelector("#addUserForm")
+    .addEventListener("submit", formSubmitHandler("/create_usr/", "POST"));
+  document
+    .querySelector("#editUserForm")
+    .addEventListener("submit", formSubmitHandler("/update_usr/", "POST"));
 };
 
-const toggleOverlay = (display) => {
-  document.getElementById("overlay").style.display = display;
+const toggleOverlayDisplay = (isVisible) => {
+  document.getElementById("overlay").style.display = isVisible
+    ? "block"
+    : "none";
+  if (!isVisible) {
+    ["popup-1", "popup-2"].forEach((popupId) =>
+      toggleDisplay(document.getElementById(popupId), false)
+    );
+  }
 };
 
-const toggleAddPopup = (display) => {
-  document.getElementById("popup-1").style.display = display;
-};
-
-const toggleEditPopup = (display) => {
-  document.getElementById("popup-2").style.display = display;
+const toggleDisplay = (element, isVisible) => {
+  element.style.display = isVisible ? "block" : "none";
 };
 
 const createUserList = (user) => {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <th scope="row">
+  const userTemplate = `
+     <th scope="row">
       <div class="media align-items-center">
         <a href="#" class="avatar rounded-circle mr-3">
           <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg"/>
@@ -99,111 +101,92 @@ const createUserList = (user) => {
       </div>
     </td>`;
 
+  const tr = document.createElement("tr");
+  tr.innerHTML = userTemplate;
   document.querySelector("#userlist").appendChild(tr);
-  tr.querySelector(".editUser").addEventListener("click", (e) => {
-    e.preventDefault();
-    toggleOverlay("block");
-    toggleAddPopup("none");
-    toggleEditPopup("block");
-    setUserValuesInForm(e.target.dataset.userid);
-  });
 
-  tr.querySelector(".deleteUser").addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log("Delete user clicked", e.target.dataset.userid);
-    deleteUser(e.target.dataset.userid);
+  tr.querySelector(".editUser").addEventListener("click", editUserClick);
+  tr.querySelector(".deleteUser").addEventListener("click", deleteUserClick);
+};
+
+const editUserClick = (e) => {
+  e.preventDefault();
+  toggleOverlayDisplay(true);
+  toggleDisplay(document.getElementById("popup-1"), false);
+  toggleDisplay(document.getElementById("popup-2"), true);
+  setUserValuesInForm(e.target.dataset.userid);
+};
+
+const deleteUserClick = (e) => {
+  e.preventDefault();
+  deleteUser(e.target.dataset.userid);
+};
+
+// Rest of the pagination and changePage function remains the same
+const createAllUsers = async (currentPageIndex = 0) => {
+  try {
+    const response = await fetch("/get_usr/");
+    const data = await response.json();
+    users = data;
+    document.querySelector("#userlist").innerHTML = "";
+    users
+      .slice(currentPageIndex * 10, (currentPageIndex + 1) * 10)
+      .forEach(createUserList);
+    createPagination(currentPageIndex);
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+  }
+};
+
+const deleteUser = async (id) => {
+  try {
+    const csrf = document.querySelector(
+      "input[name=csrfmiddlewaretoken]"
+    ).value;
+    await fetch(`/delete_usr/${id}/`, {
+      method: "DELETE",
+      headers: {
+        "X-CSRFToken": csrf,
+      },
+    });
+    createAllUsers();
+  } catch (error) {
+    console.error("Failed to delete user:", error);
+  }
+};
+
+const setUserValuesInForm = (userid) => {
+  const user = users.find((u) => u.id.toString() === userid);
+  if (!user) return;
+  const form = document.querySelector("#editUserForm");
+  Object.keys(user).forEach((key) => {
+    if (form.elements[key]) form.elements[key].value = user[key];
   });
+  form.elements["password"].value = ""; // Clear password field
 };
 
 const createPagination = (currentPageIndex = 0) => {
   const ul = document.querySelector(".pagination");
-  ul.innerHTML = "";
-  for (let i = 0; i < Math.ceil(users.length / 10); i++) {
+  ul.innerHTML = ""; // Clear existing pagination links
+
+  const totalPages = Math.ceil(users.length / 10);
+  for (let i = 0; i < totalPages; i++) {
     const li = document.createElement("li");
     li.className = `page-item ${i === currentPageIndex ? "active" : ""}`;
     li.innerHTML = `<a class="page-link" href="#" data-start="${i * 10}">${
       i + 1
     }</a>`;
-    li.querySelector(".page-link").addEventListener("click", changePage);
     ul.appendChild(li);
   }
+
+  // Add click event listeners to the newly created page links
+  document.querySelectorAll(".pagination .page-link").forEach((link) => {
+    link.addEventListener("click", changePage);
+  });
 };
 
 const changePage = (event) => {
   event.preventDefault();
-  const start = parseInt(event.target.getAttribute("data-start"));
-  createAllUsers(Math.floor(start / 10));
-};
-
-let users = [];
-const createAllUsers = (currentPageIndex = 0) => {
-  const start = currentPageIndex * 10;
-  const end = start + 10;
-  document.querySelector("#userlist").innerHTML = "";
-
-  fetch("/get_usr/")
-    .then((response) => response.json())
-    .then((data) => {
-      users = data;
-      users.slice(start, end).forEach(createUserList);
-      createPagination(currentPageIndex);
-    });
-};
-
-const deleteUser = (id) => {
-  id = parseInt(id);
-  csrf = document.querySelector("input[name=csrfmiddlewaretoken]").value;
-  fetch(`/delete_usr/${id}/`, {
-    headers: {
-      "X-CSRFToken": csrf,
-    },
-    method: "DELETE",
-  }).then(() => {
-    createAllUsers();
-  });
-};
-
-const setUserValuesInForm = (userid) => {
-  const user = getUser(parseInt(userid));
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#username").value = `${user.username}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#name").value = `${user.name}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#country").value = `${user.country}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#status").value = `${user.status}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#visaType").value = `${user.visaType}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#address").value = `${user.address}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#email").value = `${user.email}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#phone").value = `${user.phone}`;
-
-  document
-    .querySelector("#editUserForm")
-    .querySelector("#id").value = `${user.id}`;
-
-  document.querySelector("#editUserForm").querySelector("#password").value = "";
-};
-
-getUser = (id) => {
-  return users.find((user) => user.id === id);
+  const pageIndex = parseInt(event.target.getAttribute("data-start")) / 10;
+  createAllUsers(pageIndex);
 };
