@@ -51,16 +51,22 @@
     position: relative;
   }
 
-  .message-contacts>.card-body {
-    padding: 1rem 1rem 1rem 1rem;
-  }
+  .message-contacts > .card-body:Hover {
+	background-color: #183464;
+}
+  .message-contacts > .card-body {
+	padding: 0.75rem 1rem 0.75rem 1rem;
+	margin-top: 0.75rem;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+}
 </style>
 {% endblock stylesheets %} {% block content %}
 
 <!-- Header -->
-<div class="header bg-gradient-primary pb-1 pt-5 pt-md-8"></div>
+<div class="header bg-gradient-primary pb-6"></div>
 
-<div class="container-fluid mt--7">
+<div class="container-fluid mt--6">
   <div class="row">
     <div class="col">
       <div class="card shadow" style="background-color: #172b4d">

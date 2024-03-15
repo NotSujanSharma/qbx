@@ -59,13 +59,16 @@
     />
 
     <!-- Specific CSS goes HERE -->
-    {% block stylesheets %}{% endblock stylesheets %}
+    {% block stylesheets %}
+   
+  
+    {% endblock stylesheets %}
   </head>
 
   <body class="">
     {% include "includes/sidenav.html" %}
 
-    <div class="main-content" id="panel">
+    <div class="main-content" id="panel" style="margin-left: 150px;">
       {% include "includes/navigation.html" %} {% block content %}{% endblock content %}
     </div>
 

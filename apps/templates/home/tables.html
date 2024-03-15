@@ -1,398 +1,137 @@
 {% extends 'layouts/base.html' %} {% block title %} Tables {% endblock title %}
 {% block content %}
 <style>
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.744);
-    display: none;
-    z-index: 10000;
-  }
 
-  .popup {
-    position: fixed;
-    top: 50%;
-    border-radius: 0.375rem;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 30px;
-    width: 60vw;
-    height: 80vh;
-    overflow: auto;
-
-    z-index: 50000;
-    /* display: none; */
-  }
-
-  .modal-header {
+  .search-programs{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e0e0e0;
+    gap:1em;
+  }
+  .search-filter{
+    display: flex;
+    flex-direction: column;
+ 
+    gap:1em;
+  }
+  .btn-drop-down{
+    background-color: #c0d7ff;
+    border: 2px solid #1048a9;
+    color: #000000;
+  }
+  .search-input{
+    height: 3em;
+    /* background-color: #172b4d; */
+    border: 1px solid #1048a9;
+    box-shadow: 0.2 0.2 0.2 0.2;
+    color:rgb(114, 114, 114);
+  }
+  .search-input:focus{
+    background-color: #ecf3ff;
+    border:2px solid #1048a9;
+    color:rgb(0, 0, 0);
+  }
+  .program-lists{
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+
+  
+  }
+  .available-programs{
+    width: 33%;
+    height: 100vh;
+    overflow-y: auto;
+    
+  }
+  .available-programs > .card{
+    height: 30vh;
+    width:97%;
+
+    /* border:1px solid #1048a9; */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.39);
+    cursor: pointer;
+   
+  }
+  .available-programs > .card:hover{
+    border:1px solid #1048a9;
+
+    box-shadow: 5px 5px 10px 5px #4d4d4d32;
+  }
+  .program-details{
+    width: 66%;
+    height: 100vh;
   }
 
-  .modal-header h5 {
-    margin: 0;
+  .program-details > .card{
+    height: 100vh;
+  }
+  .filter-programs .dropdown > button{
+    background-color:#fafcff;
+    
+    border:1px solid rgba(0, 0, 255, 0.407);
+  }
+  .filter-programs  .dropdown > button:hover{
+    background-color:#a1c2fb;
+    color:black;
   }
 
-  .modal-header button {
-    background: none;
+  /* additional */
+    .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* .dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
     border: none;
-    font-size: 20px;
+    cursor: pointer;
+  } */
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+  }
+
+  .dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    color: black;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  .show {
+    display: block;
+    opacity: 1;
+    width: max-content;
+  }
+
+  .checkbox-container {
     cursor: pointer;
   }
 
-  .modal-body {
-    padding: 20px 0;
-  }
-
-  .modal-body .form-group {
-    margin-bottom: 20px;
-  }
-
-  .modal-body .form-group label {
-    margin-bottom: 10px;
-    color: #494646;
-  }
-
-  .modal-body .form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-  }
-
-  .modal-body .form-group input:focus {
-    outline: none;
-    color: #172b4d;
-  }
-
-  .modal-body .form-group button {
-    padding: 10px 20px;
-    border: none;
-    background: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .modal-body .form-group button:hover {
-    background: #0056b3;
-  }
-
-  .modal-body .form-group button:focus {
-    outline: none;
-  }
-
-  .modal-body .form-group button:active {
-    transform: scale(0.98);
-  }
-
-  .modal-body .form-group button[type="submit"] {
-    background: #28a745;
-  }
-
-  .modal-body .form-group button[type="submit"]:hover {
-    background: #218838;
-  }
-
-  .modal-body .form-group button[type="submit"]:focus {
-    outline: none;
-  }
-
-  .modal-body .form-group button[type="submit"]:active {
-    transform: scale(0.98);
-  }
-
-  .modal-body .form-group button[type="submit"]:disabled {
-    background: #6c757d;
-    cursor: not-allowed;
-  }
-
-  .modal-body .form-group button[type="submit"]:disabled:hover {
-    background: #5a6268;
-  }
-
-  .modal-body .form-group button[type="submit"]:disabled:focus {
-    outline: none;
-  }
-
-  .modal-body .form-group button[type="submit"]:disabled:active {
-    transform: scale(0.98);
+  .checkbox-container input {
+    margin-right: 10px;
   }
 </style>
-<div class="overlay" id="overlay">
-  <div class="popup" id="popup-1">
-    <div class="content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New Client</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="addUserForm" method="post" action="/create_usr/">
-          {% csrf_token %}
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-              placeholder="Enter Username"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              placeholder="Enter Name"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              placeholder="Enter Email"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="phone">Phone</label>
-            <input
-              type="text"
-              class="form-control"
-              id="phone"
-              name="phone"
-              placeholder="Enter Phone"
-            />
-          </div>
-          <div class="form-group">
-            <label for="address">Address</label>
-            <input
-              type="text"
-              class="form-control"
-              id="address"
-              name="address"
-              placeholder="Enter Address"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="country">Country</label>
-            <input
-              type="text"
-              class="form-control"
-              id="country"
-              name="country"
-              placeholder="Enter Country"
-            />
-          </div>
-          <div class="form-group">
-            <label for="status">Status</label>
-            <input
-              type="text"
-              class="form-control"
-              id="status"
-              name="status"
-              placeholder="Enter Status"
-            />
-          </div>
-          <div class="form-group">
-            <label for="visaType">Visa Type</label>
-            <input
-              type="text"
-              class="form-control"
-              id="visaType"
-              name="visaType"
-              placeholder="Enter Visa Type"
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              name="password"
-              placeholder="Enter Password"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary">Add</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="popup" id="popup-2">
-    <div class="content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editUserHeader">Edit Client</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-          id="close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="editUserForm" method="post" action="/create_usr/">
-          {% csrf_token %}
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              id="id"
-              name="id"
-              value=""
-              hidden
-            />
-            <label for="username">Username</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-              placeholder="Enter Username"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              placeholder="Enter Name"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              placeholder="Enter Email"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="phone">Phone</label>
-            <input
-              type="text"
-              class="form-control"
-              id="phone"
-              name="phone"
-              placeholder="Enter Phone"
-            />
-          </div>
-          <div class="form-group">
-            <label for="address">Address</label>
-            <input
-              type="text"
-              class="form-control"
-              id="address"
-              name="address"
-              placeholder="Enter Address"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="country">Country</label>
-            <input
-              type="text"
-              class="form-control"
-              id="country"
-              name="country"
-              placeholder="Enter Country"
-            />
-          </div>
-          <div class="form-group">
-            <label for="status">Status</label>
-            <input
-              type="text"
-              class="form-control"
-              id="status"
-              name="status"
-              placeholder="Enter Status"
-            />
-          </div>
-          <div class="form-group">
-            <label for="visaType">Visa Type</label>
-            <input
-              type="text"
-              class="form-control"
-              id="visaType"
-              name="visaType"
-              placeholder="Enter Visa Type"
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              name="password"
-              placeholder="Enter Password"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary">Apply</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="header bg-primary pb-6">
-  <div class="container-fluid">
-    <div class="header-body">
-      <div class="row align-items-center py-4">
-        <div class="col-lg-6 col-7">
-          <h6 class="h2 text-white d-inline-block mb-0">Clients</h6>
-          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-              <li class="breadcrumb-item">
-                <a href="#"><i class="fas fa-home"></i></a>
-              </li>
-              <li class="breadcrumb-item"><a href="#">Clients</a></li>
-              <li class="breadcrumb-item active" aria-current="page">
-                Clients
-              </li>
-            </ol>
-          </nav>
-        </div>
-        <div class="col-lg-6 col-5 text-right">
-          <a href="#" class="btn btn-sm btn-neutral" id="newUser">New</a>
-          <a href="#" class="btn btn-sm btn-neutral">Filters</a>
-        </div>
-      </div>
-    </div>
-  </div>
+  
 </div>
 
 <!-- Page content -->
@@ -400,22 +139,210 @@
   <!-- Dark table -->
   <div class="row">
     <div class="col">
-      <div class="card bg-default shadow">
+      <div class="card shadow" style="background-color: #f6faff;">
         <div class="card-header bg-transparent border-0">
-          <h3 class="text-white mb-0">Client List</h3>
+          <div class="search-filter">
+            <div class="search-programs">
+              <input type="text" id="search" class="form-control search-input" placeholder="Search Programs" />  
+              <button class="btn btn-primary" id="searchBtn">Search</button>
+            </div>
+            <div class="filter-programs">
+              <div class="dropdown">
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Location</button>
+                <div class="dropdown-content">
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Toronto</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">London</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Brampton</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Oshawa</a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Program Type</button>
+                <div class="dropdown-content">
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Under Graduate</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Post Graduate</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Masters</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">PHD</a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Intake</button>
+                <div class="dropdown-content">
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2024 Summer</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2024 Fall</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2025 Winter</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2025 Summer</a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Tuition Fee</button>
+                <div class="dropdown-content">
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">0 - $10,000</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">$10,000 - $20,000</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">$20,000 - $25,000</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">$25,000 +</a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">IELTS/PTE</button>
+                <div class="dropdown-content">
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">4 - 5 | 50 - 55</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">5 - 6 | 55 - 63</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">6 - 7 | 64 - 70</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">7 - 9 | 71 +</a>
+                </div>
+              </div>
+              <!-- clear button -->
+              <button class="btn btn-primary" id="clearBtn" onclick="clearFilter()">Clear</button>
+
+            </div>
+          </div>
         </div>
-        <div class="table-responsive">
+      </div>
+    </div>
+  </div>
+        <div class="program-lists">
+          <div class="available-programs">
+            <!-- Program lists -->
+            <div class="card" id="program-lists">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
+                  </div>
+                  <div class="col-md-8">
+                    <h2>Computer Programming</h2>
+                    <h4>Seneca Polytechnic</h4>
+                    <p>Jan | Sept | March</p>
+                    <h3>$16,000 CAD / Year</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card" id="program-lists">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
+                  </div>
+                  <div class="col-md-8">
+                    <h2>Computer Programming</h2>
+                    <h4>Seneca Polytechnic</h4>
+                    <p>Jan | Sept | March</p>
+                    <h3>$16,000 CAD / Year</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card" id="program-lists">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
+                  </div>
+                  <div class="col-md-8">
+                    <h2>Computer Programming</h2>
+                    <h4>Seneca Polytechnic</h4>
+                    <p>Jan | Sept | March</p>
+                    <h3>$16,000 CAD / Year</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card" id="program-lists">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
+                  </div>
+                  <div class="col-md-8">
+                    <h2>Computer Programming</h2>
+                    <h4>Seneca Polytechnic</h4>
+                    <p>Jan | Sept | March</p>
+                    <h3>$16,000 CAD / Year</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card" id="program-lists">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
+                  </div>
+                  <div class="col-md-8">
+                    <h2>Computer Programming</h2>
+                    <h4>Seneca Polytechnic</h4>
+                    <p>Jan | Sept | March</p>
+                    <h3>$16,000 CAD / Year</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="program-details">
+            <div class="card">
+              
+              <div class="card-header bg-transparent border-0">
+                <h1 class="mb-0" style="color: rgb(28, 28, 28)5">Computer Programming </h1>
+                <h2>Seneca College</h2>
+              </div>
+              <div class="card-body bg-transparent border-0">
+                <h3>Program Description</h3>
+
+                <p>
+                  The Computer Programming and Analysis program provides you, the student, with a thorough understanding of the business and technical environment of computer programming. You will learn the skills necessary to design, develop, and maintain software systems. You will also learn to develop and manage databases, computer networks, and websites. The program also covers the business and technical skills necessary to analyze and solve complex problems in a dynamic and fast-paced industry.
+                </p>
+                <h3>Program Details</h3>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h4>Duration</h4>
+                    <p>2 Years</p>
+                    <h4>Intakes</h4>
+                    <p>Jan | Sept | March</p>
+                    <h4>IELTS / PTE</h4>
+                    <p>6.5 / 58</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h4>Program Type</h4>
+                    <p>Post Graduate</p>
+                    <h4>Min GPA</h4>
+                    <p>3.0</p>
+                    <h4>Tuition Fee</h4>
+                    <p>$16,000 CAD / Year</p>
+                  </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                  <button class="btn btn-primary">Apply Now</button>
+
+                  </div>
+              </div>
+            </div>
+            
+            
+          </div> 
+
+
+        </div>
+        <div class="table-responsive" hidden>
           <table class="table align-items-center table-dark table-flush">
             <thead class="thead-dark">
               <tr>
-                <th scope="col" class="sort" data-sort="name">Name</th>
-                <th scope="col" class="sort" data-sort="budget">Country</th>
-                <th scope="col" class="sort" data-sort="status">Status</th>
-                <th scope="col">Visa Type</th>
-                <th scope="col" class="sort" data-sort="completion">
-                  Completion
+                <th scope="col" class="sort" data-sort="name">Program</th>
+                <th scope="col" class="sort" data-sort="budget">University</th>
+                <th scope="col" class="sort" data-sort="status">
+                  Availability
                 </th>
-                <th scope="col"></th>
+                <th scope="col">Type</th>
+                <th scope="col">Intakes</th>
+                <th scope="col">IELTS / PTE</th>
+                <th scope="col">MIN GPA</th>
               </tr>
             </thead>
             <tbody class="list" id="userlist">
@@ -425,39 +352,7 @@
         </div>
 
         <!-- card footer -->
-        <div class="card-footer py-4" style="background-color: #172b4d">
-          <nav aria-label="...">
-            <ul class="pagination justify-content-end mb-0">
-              <!-- <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">
-                  <i class="fas fa-angle-left"></i>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li> -->
-              <!-- <li class="page-item active">
-                <a class="page-link" data-start="0" data-end="9" href="#"
-                  >1 <span class="sr-only">(current)</span></a
-                >
-              </li>
-              <li class="page-item">
-                <a class="page-link" data-start="10" data-end="19" href="#"
-                  >2</a
-                >
-              </li>
-              <li class="page-item">
-                <a class="page-link" data-start="20" data-end="29" href="#"
-                  >3</a
-                >
-              </li> -->
-              <!-- <li class="page-item">
-                <a class="page-link" href="#">
-                  <i class="fas fa-angle-right"></i>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li> -->
-            </ul>
-          </nav>
-        </div>
+       
       </div>
     </div>
   </div>
@@ -470,4 +365,71 @@
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
 <script src="/static/assets/js/userlist.js"></script>
+<script>
+  clearFilter();
+  function hideAllDropdowns() {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      openDropdown.classList.remove('show');
+      var btn = openDropdown.previousElementSibling;
+      updateButtonText(btn);
+    }
+  }
+  function toggleDropdown(element) {
+    // hide dropdown of every other elemetn
+    hideAllDropdowns();
+    var dropdownContent = element.nextElementSibling;
+    dropdownContent.classList.toggle("show");
+    
+    
+
+  }
+
+  function updateSelection(checkbox, category) {
+    // var dropdownContent = checkbox.closest('.dropdown-content');
+    // var btn = dropdownContent.previousElementSibling;
+    // let count = dropdownContent.querySelectorAll('input[type="checkbox"]:checked').length;
+    // btn.textContent = count > 0 ? `${category} (${count} selected)` : category;
+    //check the box
+    checkbox.querySelector('input[type="checkbox"]').checked = !checkbox.querySelector('input[type="checkbox"]').checked;
+    updateButtonText(checkbox.closest('.dropdown').querySelector('button'));
+
+
+  }
+
+  // Close the dropdowns if the user clicks outside of them
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+          var btn = openDropdown.previousElementSibling;
+          updateButtonText(btn);
+        }
+      }
+    }
+  }
+
+  function updateButtonText(btn) {
+    var dropdownContent = btn.nextElementSibling;
+    let count = dropdownContent.querySelectorAll('input[type="checkbox"]:checked').length;
+    let category = btn.textContent.replace(/\s\(.*\)/, '');
+    btn.textContent = count > 0 ? `${category} (${count} selected)` : category;
+  }
+
+  function clearFilter() {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      openDropdown.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      var btn = openDropdown.previousElementSibling;
+      updateButtonText(btn);
+    }
+  }
+</script>
 {% endblock javascripts %}

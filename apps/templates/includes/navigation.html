@@ -9,14 +9,19 @@
         id="navbar-search-main"
       >
         <div class="form-group mb-0">
-          <div class="input-group input-group-alternative input-group-merge">
-            <div class="input-group-prepend">
-              <span class="input-group-text"
-                ><i class="fas fa-search"></i
-              ></span>
-            </div>
-            <input class="form-control" placeholder="Search" type="text" />
-          </div>
+          
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item">
+                <a href="#"><i class="fas fa-home"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Canada</a></li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Programs
+              </li>
+            </ol>
+          </nav>
+      
         </div>
         <button
           type="button"
@@ -304,11 +309,6 @@
                   src="/static/assets/img/theme/team-4.jpg"
                 />
               </span>
-              <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm font-weight-bold">
-                  {{ request.user.username }}
-                </span>
-              </div>
             </div>
           </a>
           <div class="dropdown-menu dropdown-menu-right">

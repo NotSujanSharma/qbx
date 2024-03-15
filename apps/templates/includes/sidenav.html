@@ -1,6 +1,7 @@
 <nav
-  class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white"
+  class="sidenav navbar  navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white"
   id="sidenav-main"
+  style="max-width:150px !important;"
 >
   <div class="scrollbar-inner">
     <!-- Brand -->
@@ -24,7 +25,7 @@
               href="/"
             >
               <i class="ni ni-tv-2 text-primary"></i>
-              <span class="nav-link-text">Dashboard</span>
+              <span class="nav-link-text">My Status</span>
             </a>
           </li>
           <li class="nav-item">
@@ -38,46 +39,24 @@
           </li>
           <li class="nav-item">
             <a
-              class="nav-link {% if 'map' in segment %} active {% endif %}"
-              href="/map.html"
-            >
-              <i class="ni ni-pin-3 text-primary"></i>
-              <span class="nav-link-text">Google</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link {% if 'profile' in segment %} active {% endif %}"
-              href="/profile.html"
-            >
-              <i class="ni ni-single-02 text-yellow"></i>
-              <span class="nav-link-text">Profile</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
               class="nav-link {% if 'tables' in segment %} active {% endif %}"
               href="/tables.html"
             >
               <i class="ni ni-bullet-list-67 text-default"></i>
-              <span class="nav-link-text">Clients</span>
+              <span class="nav-link-text">Programs </span>
             </a>
           </li>
-
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">
-              <i class="ni ni-user-run text-red"></i>
-              <span class="nav-link-text">Logout</span>
+            <a
+              class="nav-link {% if 'map' in segment %} active {% endif %}"
+              href="/map.html"
+            >
+              <i class="ni ni-pin-3 text-primary"></i>
+              <span class="nav-link-text">Find Us</span>
             </a>
           </li>
         </ul>
-        <!-- Divider -->
-        <hr class="my-3" />
-        <!-- Heading -->
-        <h6 class="navbar-heading p-0 text-muted">
-          <span class="docs-normal">Resources</span>
-        </h6>
-        <!-- Navigation -->
+
         <ul class="navbar-nav mb-md-3">
           <li class="nav-item">
             <a

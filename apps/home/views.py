@@ -11,6 +11,7 @@ from django.urls import reverse
 from .models import SubUser
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .getdata import get_uni_data
 
 
 @login_required(login_url="/login/")
@@ -45,6 +46,20 @@ def create_sub_user(request):
             return HttpResponse("failed")
 
         
+
+@csrf_exempt
+@login_required(login_url="/login/")
+def get_data(request):
+    if request.method == 'GET':
+        try: 
+        
+            page = request.GET['page']
+            data = get_uni_data(page)
+            return HttpResponse(json.dumps(data), content_type='application/json')
+        
+        except Exception as e:
+            print(e)
+            return HttpResponse("failed")
 
 @csrf_exempt
 @login_required(login_url="/login/")

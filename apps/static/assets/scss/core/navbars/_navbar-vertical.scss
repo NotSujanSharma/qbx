@@ -7,6 +7,7 @@
     padding-top: 0;
     border-width: 0 0 1px 0;
     border-style: solid;
+
     @if $enable-shadows {
         box-shadow: $navbar-vertical-box-shadow;
     }
@@ -34,7 +35,7 @@
     }
 
     .navbar-brand-img,
-    .navbar-brand > img {
+    .navbar-brand>img {
         max-width: 100%;
         max-height: 2rem;
     }
@@ -79,7 +80,7 @@
 
             // Icon
 
-            > i {
+            >i {
                 min-width: $navbar-icon-min-width;
                 font-size: .9375rem;
                 line-height: ($font-size-base * $line-height-base);
@@ -186,7 +187,9 @@
                         min-height: 100%;
                         padding-left: 0;
                         padding-right: 0; // Target IE 10 & 11
-                        @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+
+                        @media all and (-ms-high-contrast: none),
+                        (-ms-high-contrast: active) {
                             min-height: none;
                             height: 100%;
                         }
@@ -218,7 +221,7 @@
                         padding-left: $navbar-vertical-padding-x;
                         padding-right: $navbar-vertical-padding-x;
 
-                        > * {
+                        >* {
                             min-width: 100%;
                         }
                     }
@@ -236,10 +239,10 @@
                         padding: $navbar-vertical-nav-link-padding-y $navbar-vertical-nav-link-padding-x;
                     }
 
-                    .navbar-nav > .nav-item {
+                    .navbar-nav>.nav-item {
                         margin-top: 2px;
 
-                        > .nav-link {
+                        >.nav-link {
                             &.active {
                                 background: $gray-100;
                                 margin-right: .5rem;
@@ -267,15 +270,16 @@
                         padding-top: $navbar-vertical-nav-link-padding-y / 1.5;
                         padding-bottom: $navbar-vertical-nav-link-padding-y / 1.5;
                         padding-left: 15px;
-                        span.sidenav-normal{
-                          padding-left: 8px;
-                          transition: all .1s ease 0s;
+
+                        span.sidenav-normal {
+                            padding-left: 8px;
+                            transition: all .1s ease 0s;
                         }
 
-                        span.sidenav-mini-icon{
-                          width: 34px;
-                          text-align: center;
-                          transition: all .1s ease 0s;
+                        span.sidenav-mini-icon {
+                            width: 34px;
+                            text-align: center;
+                            transition: all .1s ease 0s;
                         }
                     }
 
@@ -300,10 +304,11 @@
     @each $breakpoint, $dimension in $grid-breakpoints {
         &-#{$breakpoint} {
             @include media-breakpoint-up(#{$breakpoint}) {
-                &.fixed-left + .main-content {
+                &.fixed-left+.main-content {
                     margin-left: $navbar-vertical-width;
                 }
-                &.fixed-right + .main-content {
+
+                &.fixed-right+.main-content {
                     margin-right: $navbar-vertical-width;
                 }
             }
@@ -312,11 +317,12 @@
 }
 
 .sidenav {
-    &.fixed-left + .main-content {
+    &.fixed-left+.main-content {
         margin-left: $navbar-vertical-width;
         @include transition($transition-base);
     }
-    &.fixed-right + .main-content {
+
+    &.fixed-right+.main-content {
         margin-right: $navbar-vertical-width;
         @include transition($transition-base);
     }
@@ -325,11 +331,14 @@
 .g-sidenav-pinned {
     .sidenav {
         @include media-breakpoint-up(xl) {
-            &.fixed-left + .main-content {
-                margin-left: $navbar-vertical-open-width;
+            &.fixed-left+.main-content {
+                margin-left: 150px;
+                // margin-left: 150px;
             }
-            &.fixed-right + .main-content {
-                margin-right: $navbar-vertical-open-width;
+
+            &.fixed-right+.main-content {
+                margin-right: 150px;
+                // margin-right: 150px;
             }
         }
     }
@@ -346,7 +355,7 @@
 
     @include media-breakpoint-up(xl) {
         &:hover {
-            max-width: $navbar-vertical-open-width;
+            max-width: 150px;
         }
 
         .sidenav-toggler {
@@ -356,19 +365,19 @@
 
     .navbar-brand,
     .navbar-heading .docs-normal {
-      display: none;
+        display: none;
     }
 
-    .navbar-heading .docs-mini{
-      padding-left: 3px;
+    .navbar-heading .docs-mini {
+        padding-left: 3px;
     }
 
-    .navbar-heading{
-      transition: all .1s ease;
+    .navbar-heading {
+        transition: all .1s ease;
     }
 
-    .navbar-brand{
-      padding: 1.5rem;
+    .navbar-brand {
+        padding: 1.5rem;
     }
 }
 
@@ -381,12 +390,14 @@
 
 .g-sidenav-show {
     .sidenav {
+
         .navbar-brand,
         .navbar-heading .docs-normal {
             display: block;
         }
+
         .navbar-heading .docs-mini {
-          display: none;
+            display: none;
         }
 
 
@@ -395,20 +406,21 @@
             @include transition($transition-base);
         }
 
-        .nav-link-text{
-          transition: 0.3s ease;
-          opacity: 1;
+        .nav-link-text {
+            transition: 0.3s ease;
+            opacity: 1;
         }
 
-        .nav-item .sidenav-mini-icon{
-          opacity: 0;
+        .nav-item .sidenav-mini-icon {
+            opacity: 0;
         }
     }
 }
 
 .g-sidenav-pinned {
     .sidenav {
-        max-width: $navbar-vertical-open-width !important;
+        // max-width: 150px !important;
+        max-width: 150px !important;
 
         .navbar-brand,
         .navbar-heading {
@@ -419,8 +431,8 @@
 
 .g-sidenav-hidden:not(.g-sidenav-show) {
     .sidenav {
-        .navbar-nav > .nav-item {
-            > .nav-link {
+        .navbar-nav>.nav-item {
+            >.nav-link {
                 &:after {
                     content: '';
                 }
@@ -439,8 +451,8 @@
 
 .g-sidenav-hide {
     .sidenav {
-        .navbar-nav > .nav-item {
-            > .nav-link {
+        .navbar-nav>.nav-item {
+            >.nav-link {
                 &:after {
                     content: '';
                 }
@@ -464,7 +476,7 @@
     .sidenav {
         transform: translateX(-$navbar-vertical-width);
 
-        &.fixed-left + .main-content {
+        &.fixed-left+.main-content {
             margin-left: 0 !important;
         }
     }

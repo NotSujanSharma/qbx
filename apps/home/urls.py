@@ -15,6 +15,7 @@ urlpatterns = [
     path('delete_usr/<int:id>/', views.delete_sub_user, name='delete_usr'),
 
     path('update_usr/', views.update_sub_user, name='update_usr'),
+    path('api/get_data/', views.get_data, name='get_data'),
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
