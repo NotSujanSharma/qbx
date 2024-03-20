@@ -4,7 +4,7 @@
 {% block stylesheets %}
 <style>
   .message-contacts {
-    border-bottom: 1px solid #1e4891;
+    border-bottom: 1px solid #bed5ff;
     border-radius: 0;
     margin-bottom: 0;
     box-shadow: 0 0;
@@ -15,10 +15,10 @@
   }
   .send-message > .card-body > textarea{
     border-radius: 10px;
-    border: 1px solid #1e4891;
+    border: 1px solid #c8dbff;
     width: 100%;
     background-color: transparent;
-    color:white;
+    color:rgb(61, 61, 61);
   }
 
   .messageBox {
@@ -34,14 +34,14 @@
     display: flex;
     flex-direction: column;
     margin:0;
-    border-top:1px  solid #1e4891;
+    border-top:1px  solid #a7c7ff;
     box-shadow: 0 0;
     width:100%;
     
   }
   .message-view {
     border-radius: 10px;
-    border: 1px solid #1e4891;
+    border: 1px solid #abcaff;
     margin-left: 1.25em;
     width: 70%;
     max-width: 70%;
@@ -52,7 +52,7 @@
   }
 
   .message-contacts > .card-body:Hover {
-	background-color: #183464;
+	background-color: #eff5ff;
 }
   .message-contacts > .card-body {
 	padding: 0.75rem 1rem 0.75rem 1rem;
@@ -60,45 +60,57 @@
   border-radius: 10px 10px 0 0;
   cursor: pointer;
 }
+.error{
+  position:absolute;
+  z-index: 50500;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size: 3em;
+  background-color: #f8d7da;
+  color: #f5365c;
+  box-shadow: 0px 2px 5px #00000063;
+  width:max-content;
+  padding-left:1rem;
+  padding-right:1rem;
+
+
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-weight: 600;
+}
 </style>
 {% endblock stylesheets %} {% block content %}
 
 <!-- Header -->
+
+
+<div class="error">
+  You are not connected to any agent
+</div>
 <div class="header bg-gradient-primary pb-6"></div>
 
 <div class="container-fluid mt--6">
   <div class="row">
     <div class="col">
-      <div class="card shadow" style="background-color: #172b4d">
-        <div class="card-header bg-transparent" style="border-bottom: 1px solid #1e4891">
-          <h3 class="mb-0" style="color: white">Chat</h3>
+      <div class="card" style="background-color: #eef4ff; box-shadow: 0px 3px 9px #00000063">
+        <div class="card-header bg-transparent" style="box-shadow:0px 1px 3px #00000063;">
+          <h3 class="mb-0" style="color: rgb(51, 51, 51)">Chat</h3>
         </div>
         <div class="card-body">
           <div class="row icon-examples">
             <!-- messaging -->
             <div class="messageBox" style="">
               <div class="col-lg-3 col-md-6"
-                style="border-radius: 10px; border: 1px solid #1e4891; width:30%; max-width:30%; ">
-                <div class="card card-stats bg-default message-contacts">
+                style="border-radius: 10px; border: 1px solid #eff5ff; width:30%; max-width:30%; ">
+                <div class="card card-stats bg-white message-contacts">
                   <div class="card-body contact  ">
                     <div class="row">
                       <div class="col">
-                        <span class="h4 font-weight-bold mb-0" style="color: white">
+                        <span class="h4 font-weight-bold mb-0" style="color: rgb(51, 51, 51)">
                           <i class="ni ni-chat text-primary"></i>
-                          Sujan Sharma
-                        </span>
-                        
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card card-stats bg-default message-contacts">
-                  <div class="card-body contact ">
-                    <div class="row">
-                      <div class="col">
-                        <span class="h4 font-weight-bold mb-0" style="color: white">
-                          <i class="ni ni-chat text-primary"></i>
-                          Nibba Sharma
+                          Agent
                         </span>
                         
                       </div>
@@ -107,10 +119,10 @@
                 </div>
               </div>
               <div class="col-lg-3 col-md-6 message-view" >
-                <div class="card card-stats bg-default send-message">
+                <div class="card card-stats bg-white send-message">
                   <div class="card-body">
-                    <textarea class="form-control" placeholder="Enter your message"></textarea>
-                    <input type = "submit" class="btn btn-primary" value="Send">
+                    <textarea class="form-control" placeholder="Enter your message" disabled></textarea>
+                    <input type = "submit" class="btn btn-primary" value="Send" disabled>
                     
                   </div>
                 </div>

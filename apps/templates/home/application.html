@@ -1,0 +1,127 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Application {% endblock title %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header bg-primary pb-6">
+    </div>
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+      <div class="row">
+        
+        <div class="col">
+          <div class="card border-0">
+            <form>
+                <div class="card-body">
+                    <h3 class="card-title">Application - Computer Programming</h3>
+                    <hr/>
+                    <input type="hidden" value="{{programId}}" id="programId" name="programId">
+                    <table class="table align-items-center table-flush">
+                        <tr>
+                            <th>Program</th>
+                            <td>Computer Programming</td>
+                        </tr>
+                        <tr>
+                            <th>College</th>
+                            <td>Seneca Polytechnic</td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td>Canada</td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td>Toronto</td>
+                        </tr>
+                    </table>
+
+                    <hr/>
+
+                    <div class="form-group">
+                        <label for="college">Intake</label>
+                        <select class="form-control" id="intake">
+                            <option value="spring">Spring</option>
+                            <option value="summer">Summer</option>
+                            <option value="fall">Fall</option>
+                            <option value="winter">Winter</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="transcripts">Passport</label>
+                            <input type="file" class="form-control-file" id="transcripts" multiple>
+                        </div>
+                        <div class="form-group col">
+                            <label for="languageDocument">Ielts/PTE Certificate(s)</label>
+                            <input type="file" class="form-control-file" id="langugeDocument" multiple>
+                        </div>
+                    
+                    </div>
+                <div class="row">
+                     <div class="form-group col">
+                        <label for="transcripts">Transcript(s)</label>
+                        <input type="file" class="form-control-file" id="transcripts" multiple>
+                    </div>
+                    <div class="form-group col">
+                        <label for="languageDocument">Other Documents</label>
+                        <input type="file" class="form-control-file" id="langugeDocument" multiple>
+                    </div>
+                </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+
+          </div>
+        </div>
+        <div class="col">
+          <div class="card border-0">
+            
+                <div class="card-body">
+                    <h3 class="card-title">Your Information</h3>
+                     <table class="table align-items-center table-flush">
+                        <tr>
+                            <th>Name</th>
+                            <td>Sujan Sharma</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth</th>
+                            <td>2003-08-05</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>sujansharma2060@gmail.com</td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td>Nepal</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>+977 9869498195</td>
+                        </tr>
+                    </table>
+                    <hr/>   <center>
+
+                        <h4 style="color:red;" >If any of your detail is incorrect, please correct in your profile page.</h4>
+                    </center>
+                </div>
+
+          </div>
+        </div>
+      </div>
+
+      {% include "includes/footer.html" %}
+      
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
+
+{% endblock javascripts %}

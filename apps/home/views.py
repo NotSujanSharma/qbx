@@ -8,51 +8,84 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
-from .models import SubUser
+# from .models import SubUser
+from apps.authentication.models import User
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .getdata import get_uni_data
+from .getdata import get_uni_data, get_filtered_data
+
+def index(request):
+    context = {'segment': 'Home'}
+    if request.user.is_authenticated:
+
+        logged_in = True
+    else:
+        logged_in= False
+    
+    context['logged_in'] = logged_in
+
+
+    html_template = loader.get_template('landing/index.html')
+    return HttpResponse(html_template.render(context, request))
+
+def contact(request):
+    context = {'segment': 'Contact'}
+    if request.user.is_authenticated:
+
+        logged_in = True
+    else:
+        logged_in= False
+    
+    context['logged_in'] = logged_in
+
+    html_template = loader.get_template('landing/contact.html')
+    return HttpResponse(html_template.render(context, request))
+
+@login_required(login_url="/login/")
+def profile(request):
+    context = {'segment': 'Profile'}
+
+    html_template = loader.get_template('home/profile.html')
+    return HttpResponse(html_template.render(context, request))
+
+@login_required(login_url="/login/")
+def programs(request):
+    context = {'segment': 'Programs'}
+    html_template = loader.get_template('home/programs.html')
+    return HttpResponse(html_template.render(context, request))
 
 
 @login_required(login_url="/login/")
-def index(request):
-    context = {'segment': 'index'}
+def chat(request):
+    context = {'segment': 'Chat'}
+
+    html_template = loader.get_template('home/chat.html')
+    return HttpResponse(html_template.render(context, request))
+
+@login_required(login_url="/login/")
+def account(request):
+    context = {'segment': 'Dashboard'}
 
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
 @csrf_exempt
 @login_required(login_url="/login/")
-def create_sub_user(request):
-    if request.method == 'POST':
-        try: 
+def application(request):
+    context = {'segment': 'Application'}
+    context = {'programId': request.GET['programId']}
 
-            username = request.POST['username']
-            name = request.POST['name']
-            email = request.POST['email']
-            phone = request.POST['phone']
-            password = request.POST['password']
-            address = request.POST['address']
-            country = request.POST['country']
-            visaType = request.POST['visaType']
-            status = request.POST['status']
-            user = SubUser(username=username, name=name, email=email, phone=phone, password=password, address=address, country=country, visaType=visaType, status=status)
-            user.save()
 
-            return HttpResponse(json.dumps({"message": "successful"}), content_type='application/json')
-        
-        except Exception as e:
-            print(e)
-            return HttpResponse("failed")
+    html_template = loader.get_template('home/application.html')
+    return HttpResponse(html_template.render(context, request))
 
-        
 
 @csrf_exempt
 @login_required(login_url="/login/")
 def get_data(request):
     if request.method == 'GET':
         try: 
-        
+            
             page = request.GET['page']
             data = get_uni_data(page)
             return HttpResponse(json.dumps(data), content_type='application/json')
@@ -63,74 +96,23 @@ def get_data(request):
 
 @csrf_exempt
 @login_required(login_url="/login/")
-def get_sub_user(request):
+def test(request, page):
     if request.method == 'GET':
-        try: 
-            users_list = []
-            users = SubUser.objects.all()
-            for user in users:
-                this_user = {
-                    "id": user.id,
-                    "username": user.username,
-                    "name": user.name,
-                    "email": user.email,
-                    "visaType": user.visaType,
-                    "phone": user.phone,
-                    "address": user.address,
-                    "status": user.status
-                    
-                }
-                users_list.append(this_user)
+        try:
+            data = get_filtered_data(page)
 
-            return HttpResponse(json.dumps(users_list), content_type='application/json')
+            return HttpResponse(json.dumps(data), content_type='application/json')
         
         except Exception as e:
             print(e)
             return HttpResponse("failed")
 
-@csrf_exempt
 @login_required(login_url="/login/")
-def delete_sub_user(request, id):
-    if request.method == 'DELETE':
-        try: 
-            user = SubUser.objects.get(id=id)
-            user.delete()
-            return JsonResponse({"message": "successful"}, status=200)
-        
-        except SubUser.DoesNotExist:
-            return JsonResponse({"error": "SubUser not found"}, status=404)
-        except Exception as e:
-            print(e)  # Consider using logging instead of print for production code
-            return JsonResponse({"error": "failed"}, status=500)
-    
+def map(request):
+    context = {'segment': 'map'}
 
-@csrf_exempt
-@login_required(login_url="/login/")
-def update_sub_user(request):
-    if request.method == 'POST':
-        try: 
-            data = json.loads(request.body)
-            uid = data['id']
-            user = SubUser.objects.get(id=data['id'])
-            if 'username' in data and data['username'] is not None:
-                user.username = data['username']
-            user.name = data['name']
-            user.email = data['email']
-            user.phone = data['phone']
-            if 'password' in data and data['password'] is not None:
-                user.password= data['password']
-            user.address = data['address']
-            user.country = data['country']
-            user.visaType = data['visaType']
-            user.status = data['status']
-            user.save()
-            return JsonResponse({"message": "successful"}, status=200)
-        
-        except SubUser.DoesNotExist:
-            return JsonResponse({"error": "SubUser not found"}, status=404)
-        except Exception as e:
-            print(e)  # Consider using logging instead of print for production code
-            return JsonResponse({"error": "failed"}, status=500)
+    html_template = loader.get_template('home/map.html')
+    return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def pages(request):
@@ -143,10 +125,10 @@ def pages(request):
 
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
-        context['segment'] = load_template
-
-        html_template = loader.get_template('home/' + load_template)
-        return HttpResponse(html_template.render(context, request))
+        
+        else:
+            html_template = loader.get_template( 'home/page-404.html' )
+            return HttpResponse(html_template.render(context, request))
 
     except template.TemplateDoesNotExist:
 
@@ -156,3 +138,23 @@ def pages(request):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+
+@login_required(login_url="/login/")
+def update_user(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user = User.objects.get(username=request.user)
+            user.first_name = data['first_name']
+            user.last_name = data['last_name']
+            user.email = data['email']
+            user.address = data['address']
+            
+            user.save()
+            return HttpResponse("success")
+        except Exception as e:
+            print(e)
+            return HttpResponse("failed")
+    else:
+        return HttpResponse("failed")

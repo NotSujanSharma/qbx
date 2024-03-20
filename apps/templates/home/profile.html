@@ -1,5 +1,14 @@
 {% extends 'layouts/base.html' %} {% block title %} Profile {% endblock title %}
+
+
+
 {% block content %}
+<style>
+  #bachelors-field{
+    display: none;
+  
+  }
+</style>
 
 <div
   class="header pb-6 d-flex align-items-center"
@@ -10,23 +19,13 @@
     background-position: center top;
   "
 >
+
   <!-- Mask -->
   <span class="mask bg-gradient-default opacity-8"></span>
   <!-- Header container -->
-  <div class="container-fluid d-flex align-items-center">
-    <div class="row">
-      <div class="col-lg-7 col-md-10">
-        <h1 class="display-2 text-white">Hello Sujan</h1>
-        <p class="text-white mt-0 mb-5">
-          This is your profile page. You can edit you profile here. You can also
-          find the consultant associated with you.
-        </p>
-      </div>
-    </div>
   </div>
-</div>
 <!-- Page content -->
-<div class="container-fluid mt--9">
+<div class="container-fluid" style="margin-top:-25rem;">
   <div class="row">
     <div class="col-xl-4 order-xl-2">
       <div class="card card-profile">
@@ -85,19 +84,21 @@
     </div>
     <div class="col-xl-8 order-xl-1" style="margin-top: -40px">
       <div class="card">
+        <form method="post" action="/update_user/">
+        {% csrf_token %}
         <div class="card-header">
           <div class="row align-items-center">
             <div class="col-8">
               <h3 class="mb-0">Edit profile</h3>
             </div>
             <div class="col-4 text-right">
-              <a href="#!" class="btn btn-sm btn-primary">Save</a>
+              <input type="submit" class="btn btn-sm btn-primary" value="Save">
             </div>
           </div>
         </div>
         <div class="card-body">
-          <form>
-            <h6 class="heading-small text-muted mb-4">User information</h6>
+          
+            <h6 class="heading-small  mb-4">User information</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-lg-6">
@@ -139,7 +140,7 @@
                       id="input-first-name"
                       class="form-control"
                       placeholder="First name"
-                      value="Lucky"
+                      value="{{ request.user.first_name }}"
                     />
                   </div>
                 </div>
@@ -153,15 +154,187 @@
                       id="input-last-name"
                       class="form-control"
                       placeholder="Last name"
-                      value="Jesse"
+                      value="{{ request.user.last_name }}"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-dob"
+                      >Date of birth</label
+                    >
+                    <input
+                      type="date"
+                      id="input-dob"
+                      class="form-control"
+                      placeholder="Date of birth"
+                      value="{{ request.user.dob }}"
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-passport-number"
+                      >Passport Number</label
+                    >
+                    <input
+                      type="text"
+                      id="input-passport-number"
+                      class="form-control"
+                      placeholder="Passport Number"
+                      value="{{ request.user.passport_number }}"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-issue-date"
+                      >Passport Date of Issue</label
+                    >
+                    <input
+                      type="date"
+                      id="input-issue-date"
+                      class="form-control"
+                      placeholder="Passport Date of Issue"
+                      value="{{ request.user.passport_issue_date }}"
+                      
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-expiry-date"
+                      >Passport  Expiry Date</label
+                    >
+                    <input
+                      type="date"
+                      id="input-expiry-date"
+                      class="form-control"
+                      placeholder="Passport Expiry Date"
+                      value="{{ request.user.passport_expiry_date }}"
                     />
                   </div>
                 </div>
               </div>
             </div>
             <hr class="my-4" />
+            <h6 class="heading-small  mb-4">Academic Information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label for="input-degree">Highest Degree</label>
+                     
+                    <select class="form-control" id="input-degree">
+                    <option value="SLC">+2</option>
+                    <option value="bachelors">Bachelors</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" id="bachelors-field">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-bachelors-gpa"
+                      >Bachelors GPA</label
+                    >
+                    <input
+                      type="text"
+                      id="input-bachelors-gpa"
+                      class="form-control"
+                      placeholder="Bachelors GPA"
+                      value="{{ request.user.bachelors_gpa }}"
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-bachelors-passout"
+                      >Passed Out Year</label
+                    >
+                    <input
+                      type="number"
+                      id="input-bachelors-passout"
+                      class="form-control"
+                      placeholder="Passed Out Year"
+                      value="{{ request.user.bachelors_passed_year }}"
+                      
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+               
+                <div class="col-lg-6">
+                  
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-slc-gpa"
+                      >+2 GPA</label
+                    >
+                    <input
+                      type="text"
+                      id="input-slc-gpa"
+                      class="form-control"
+                      placeholder="+2 GPA"
+                    />
+                  </div>
+                </div>
+                 <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-slc-passout"
+                      >Passed Out Year</label
+                    >
+                    <input
+                      type="number"
+                      id="input-slc-passout"
+                      class="form-control"
+                      placeholder="Passed Out Year"
+                      
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                 <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-see-gpa"
+                      >Class 10 GPA</label
+                    >
+                    <input
+                      type="text"
+                      id="input-see-gpa"
+                      class="form-control"
+                      placeholder="Class 10 GPA"
+                    />
+                  </div>
+                  
+                </div>
+                 <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-see-passout"
+                      >Passed Out Year</label
+                    >
+                    <input
+                      type="number"
+                      id="input-see-passout"
+                      class="form-control"
+                      placeholder="Passed Out Year"
+                      
+                    />
+                  </div>
+                </div>
+                
+              </div>
+              
+            </div>
+            <hr class="my-4" />
             <!-- Address -->
-            <h6 class="heading-small text-muted mb-4">Contact information</h6>
+            <h6 class="heading-small  mb-4">Contact information</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-md-12">
@@ -182,21 +355,44 @@
             </div>
             <hr class="my-4" />
             <!-- Description -->
-            <h6 class="heading-small text-muted mb-4">About me</h6>
+            <h6 class="heading-small  mb-4">Documents</h6>
             <div class="pl-lg-4">
-              <div class="form-group">
-                <label class="form-control-label">About Me</label>
-                <textarea
-                  rows="4"
-                  class="form-control"
-                  placeholder="A few words about you ..."
-                >
-A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea
-                >
+              <div class="row">
+                <div class="form-group col">
+                  <div class="file-upload">
+                      <label class="form-control-label" for="input-transcripts">Transcripts</label>
+                      <input type="file" class="form-control-file" id="transcripts1" accept="application/pdf" multiple>
+                      <div class="preview" id="preview1"></div>
+                  </div>
+                </div>
+                <div class="form-group col">
+                  <div class="file-upload">
+                      <label class="form-control-label" for="input-languagedocs">IELTS / PTE Certs</label>
+                      <input type="file" class="form-control-file" id="languagedocs" accept="application/pdf" multiple>
+                      <div class="preview" id="preview2"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col">
+                  <div class="file-upload">
+                      <label class="form-control-label" for="input-passport">Passport</label>
+                      <input type="file" class="form-control-file" id="passportdocs" accept="application/pdf" multiple>
+                      <div class="preview" id="preview3"></div>
+                  </div>
+                </div>
+                <div class="form-group col">
+                  <div class="file-upload">
+                      <label class="form-control-label" for="input-otherdocs">Other Documents</label>
+                      <input type="file" class="form-control-file" id="otherdocs" accept="application/pdf" multiple>
+                      <div class="preview" id="preview4"></div>
+                  </div>
+                </div>
               </div>
             </div>
-          </form>
+          
         </div>
+        </form>
       </div>
     </div>
   </div>
@@ -207,4 +403,70 @@ A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.min.js"></script>
+<script>
+
+
+
+const degreeSelect = document.getElementById('input-degree');
+const bachelorsField = document.getElementById('bachelors-field');
+
+degreeSelect.addEventListener('change', function() {
+  if (degreeSelect.value === 'bachelors') {
+    bachelorsField.style.display = 'flex';
+  } else {
+    bachelorsField.style.display = 'none';
+  }
+});
+                    
+  // Function to setup the file input listener with a scale parameter for the preview size
+  function setupFileInput(fileInputId, previewContainerId, scale = 0.5) { // Default scale set to 0.5
+    document.getElementById(fileInputId).addEventListener('change', function(event) {
+      var files = event.target.files;
+      var previewContainer = document.getElementById(previewContainerId);
+      previewContainer.innerHTML = ''; // Clear existing previews
+
+      for (let file of files) {
+        if (file.type === 'application/pdf') {
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+            var typedarray = new Uint8Array(this.result);
+
+            pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+              pdf.getPage(1).then(function(page) {
+                // Adjust the viewport of the page by applying the scale
+                var viewport = page.getViewport({scale: scale});
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                var renderContext = {
+                  canvasContext: context,
+                  viewport: viewport
+                };
+                page.render(renderContext).promise.then(function() {
+                  previewContainer.appendChild(canvas);
+                });
+              });
+            });
+          };
+
+          reader.readAsArrayBuffer(file);
+        }
+      }
+    });
+  }
+
+  // Setup file inputs with preview containers and a scale factor for size adjustment
+  setupFileInput('transcripts1', 'preview1', 0.5); // Example scale factor of 0.5
+  setupFileInput('languagedocs', 'preview2', 0.5); // Adjust the scale factor as needed
+  setupFileInput('passportdocs', 'preview3', 0.5); // Adjust the scale factor as needed
+  setupFileInput('otherdocs', 'preview4', 0.5); // Adjust the scale factor as needed
+</script>
+
+
+{% endblock javascripts %}

@@ -10,19 +10,22 @@ from .forms import LoginForm, SignUpForm
 
 
 def login_view(request):
-    form = LoginForm(request.POST or None)
+    if request.user.is_authenticated:  # Check if user is already logged in
+        #get user username
 
+        return redirect("/account/")
+
+    form = LoginForm(request.POST or None)
     msg = None
 
     if request.method == "POST":
-
         if form.is_valid():
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/")
+                return redirect("/account/")
             else:
                 msg = 'Invalid credentials'
         else:
@@ -32,6 +35,8 @@ def login_view(request):
 
 
 def register_user(request):
+    if request.user.is_authenticated:  # Check if user is already logged in
+        return redirect("/account/")
     msg = None
     success = False
 
@@ -43,7 +48,7 @@ def register_user(request):
             raw_password = form.cleaned_data.get("password1")
             user = authenticate(username=username, password=raw_password)
 
-            msg = 'User created - please <a href="/login">login</a>.'
+            msg = '<h3>User created - please <a href="/login">login</a>.</h3>'
             success = True
 
             # return redirect("/login/")
@@ -54,3 +59,4 @@ def register_user(request):
         form = SignUpForm()
 
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+

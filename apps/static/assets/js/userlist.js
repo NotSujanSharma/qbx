@@ -1,92 +1,109 @@
+var programs=[]
 document.addEventListener("DOMContentLoaded", () => {
-  createAllUsers();
-  setupEventListeners();
+  createAllPrograms();
 });
 
-const setupEventListeners = () => {
-  const overlay = document.getElementById("overlay");
-};
 
-const createUserList = (user) => {
-  const userTemplate = `
-     <th scope="row">
-      <div class="media align-items-center">
-        <div class="media-body">
-          <span class="name mb-0 text-sm">Early Childhood Computer Programming</span>
-        </div>
-      </div>
-    </th>
-    <td class="budget">Seneca Polytechnic</td>
-    <td>
-      <span class="badge badge-dot mr-4"><i class="bg-green"></i><span class="status">Open</span></span>
-    </td>
-    <td><div class="avatar-group">Undergraduate</div></td>
-    <td>
-      Jan / May / Sep
-    </td>
-    <td>
-      6.5 - 60
-    </td>
-    <td>
-      3.5+
-    </td>
-    <td class="text-right" >
-      <div class="dropdown">
-        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Apply
-        </a>
-        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-          <a class="dropdown-item editUser" data-userid='${user.id}'  href="#">Jan</a>
-          <a class="dropdown-item deleteUser" data-userid='${user.id}' href="#">May</a>
-          <a class="dropdown-item updateStatus" data-userid='${user.id}' href="#">Sept</a>
-        </div>
-      </div>
-    </td>`;
+const createProgramList = (program) => {
+  const userTemplate = `<div class="card-body" data-id=${program['id']} onclick="printData(this)">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="${program["school"]["logo"]}" height=90 width=80 alt="Program Image" />
+                  </div>
+                  <div class="col-md-8">
+                    <h2>${program["name"]}</h2>
+                    <h4>${program["school"]["name"]}</h4>
+                    <hr>
+                    <h3>${program["formattedTuition"]}</h3>
+                  </div>
+                </div>
+              </div>`;
 
-  const tr = document.createElement("tr");
-  tr.innerHTML = userTemplate;
-  document.querySelector("#userlist").appendChild(tr);
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = userTemplate;
+  document.querySelector(".available-programs").appendChild(div);
 
 };
 
 // Rest of the pagination and changePage function remains the same
-const createAllUsers = async (currentPageIndex = 0) => {
+const createAllPrograms = async (currentPageIndex = 0) => {
   try {
-    const response = await fetch("/get_usr/");
+    const response = await fetch("/api/get_data/?page=1");
     const data = await response.json();
-    users = data;
-    document.querySelector("#userlist").innerHTML = "";
-    users
-      .slice(currentPageIndex * 10, (currentPageIndex + 1) * 10)
-      .forEach(createUserList);
-    createPagination(currentPageIndex);
+    programs = data;
+    document.querySelector(".available-programs").innerHTML = "";
+    programs["programs"]
+      .forEach(createProgramList);
   } catch (error) {
     console.error("Failed to fetch users:", error);
   }
 };
 
-const createPagination = (currentPageIndex = 0) => {
-  const ul = document.querySelector(".pagination");
-  ul.innerHTML = ""; // Clear existing pagination links
 
-  const totalPages = Math.ceil(users.length / 10);
-  for (let i = 0; i < totalPages; i++) {
-    const li = document.createElement("li");
-    li.className = `page-item ${i === currentPageIndex ? "active" : ""}`;
-    li.innerHTML = `<a class="page-link" href="#" data-start="${i * 10}">${
-      i + 1
-    }</a>`;
-    ul.appendChild(li);
-  }
-
-  // Add click event listeners to the newly created page links
-  document.querySelectorAll(".pagination .page-link").forEach((link) => {
-    link.addEventListener("click", changePage);
+function printData(element) {
+  const programId = element.getAttribute("data-id");
+  program = getProgramDetails(programId);
+  program.then((program) => {
+    let programDetails = document.querySelector(".program-details");
+    // get child with id program-name and change innerHTML
+    programDetails.querySelector("#program-name").innerHTML = program["name"];
+    programDetails.querySelector("#school-name").innerHTML = program["school"]["name"];
+    programDetails.querySelector("#program-description").innerHTML = program["programSummary"];
+    programDetails.querySelector("#programId").value = programId;
   });
+  
 };
 
-const changePage = (event) => {
-  event.preventDefault();
-  const pageIndex = parseInt(event.target.getAttribute("data-start")) / 10;
-  createAllUsers(pageIndex);
+const getProgramDetails = async (programId) => {
+  
+  const program = programs["programs"].filter((program) => program.id == programId)[0];
+  return program;
+
 };
+
+const test = async (urlData) => {
+  try {
+    // get from data
+
+    const response = await fetch(`/test/${urlData}`);
+    const data = await response.json();
+    programs = data;
+    document.querySelector(".available-programs").innerHTML = "";
+    programs["programs"]
+      .forEach(createProgramList);
+  
+    // document.querySelector(".available-programs").innerHTML = "";
+    // programs["programs"]
+    //   .forEach(createProgramList);
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+  }
+};
+
+
+function getCheckedValues() {
+  const checkboxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]:checked');
+  const values = {}; // Object to hold the checkbox values
+
+  checkboxes.forEach(checkbox => {
+    const name = checkbox.name;
+    const value = checkbox.value;
+
+    if (!values[name]) {
+      values[name] = [];
+    }
+    values[name].push(value);
+  });
+
+  
+  for (const key in values) {
+    values[key] = values[key].join(',');
+  }
+  let searchdata = document.getElementById('search').value;
+  let urldata = `page[number]=1${values["location"] ? `&locations=${values["location"]}` : ''}`;
+  urldata += `${values["fees"] ? `&tuitions=${values["fees"]}&tuitionCurrency=USD` : ''}`;
+  urldata += `${searchdata ? `&q=${searchdata}` : ''}`;
+  test(urldata);
+  return values;
+}

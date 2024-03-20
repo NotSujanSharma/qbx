@@ -6,127 +6,170 @@
 .close-notification{
   cursor: pointer;
 }
+.table-responsive > table > thead > tr > th {
+  color:black !important;
+  font-size: 0.7rem;
+}
+.table-responsive > table  {
+  color:black !important;
+  
+}
+.table-responsive > table > tbody {
+  background-color: #f8faff;
+}
   
 </style>
 {% endblock stylesheets %} {% block content %}
 
 <!-- Header -->
 <div class="header bg-primary pb-6">
-  <div class="container-fluid">
-    <div class="header-body">
-      <div class="row align-items-center py-4">
-        
-      </div>
-      <!-- Card stats -->
-      <div class="row">
-        <div class="col-xl-3 col-md-6">
-          <div class="card status card-stats">
-            <!-- Card body -->
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">
-                    Date: 2024/02/02
-                  </h5>
-                  <span class="h2 font-weight-bold mb-0">Offer Letter</span>
-                </div>
-                <div class="col-auto mt-2">
-                  <div
-                    class="icon icon-shape bg-green text-white rounded-circle shadow"
-                  >
-                    <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/FFFFFF/checkmark--v1.png" alt="checkmark--v1"/>
-                  </div>
-                </div>
-              </div>
-              <p class=" mb-0 text-sm">
-                <span class="text-nowrap">Seneca Polytechnic</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-          <div class="card status card-stats">
-            <!-- Card body -->
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">
-                    Date: 2024/02/14
-                  </h5>
-                  <span class="h2 font-weight-bold mb-0">Documentation</span>
-                </div>
-                <div class="col-auto mt-2">
-                  <div
-                    class="icon icon-shape bg-yellow text-white rounded-circle shadow"
-                  >
-                  <img width="30" height="30" src="https://img.icons8.com/ios/50/FFFFFF/hourglass.png" alt="hourglass"/>
-                    
-                  </div>
-                </div>
-              </div>
-              <p class=" mb-0 text-sm">
-                <span class="text-nowrap">Pending</span>
-              </p>
-            </div>
-          </div>
-        </div>
-       
-        <div class="col-xl-3 col-md-6">
-          <div class="card status card-stats">
-            <!-- Card body -->
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">
-                    Date: 2024/02/14
-                  </h5>
-                  <span class="h2 font-weight-bold mb-0">Visa Lodgement</span>
-                </div>
-                <div class="col-auto mt-2">
-                  <div
-                    class="icon icon-shape bg-yellow text-white rounded-circle shadow"
-                  >
-                  <img width="30" height="30" src="https://img.icons8.com/ios/50/FFFFFF/hourglass.png" alt="hourglass"/>
-                  </div>
-                </div>
-              </div>
-              <p class=" mb-0 text-sm">
-                <span class="text-nowrap">Pending</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-          <div class="card status card-stats">
-            <!-- Card body -->
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">
-                    Date: 2024/02/28
-                  </h5>
-                  <span class="h2 font-weight-bold mb-0">Visa Status</span>
-                </div>
-                <div class="col-auto mt-2">
-                  <div
-                    class="icon icon-shape bg-gray text-white rounded-circle shadow"
-                  >
-                  </div>
-                </div>
-              </div>
-              <p class=" mb-0 text-sm">
-                <span class="text-nowrap">--</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Page content -->
 <div class="container-fluid mt--6">
+  <div class="header-body">
+      <div class="row" >
+        <div class="col-12">
+          <div class="card status card-stats" style="background-color: #eef4ff;">
+            <div class="card-body">
+                <div class="col">
+                  <h4 class="card-title text-uppercase  mb-0 pt-2">
+                    College Applications
+                  </h4>
+                </div>
+              <hr style="margin:1rem;"/>
+              <!-- College Application Header -->
+              <div class="table-responsive">
+                <table class="table align-items-center table-light table-flush">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col" data-sort="program-name">Program</th>
+                      <th scope="col" data-sort="program-country">Country</th>
+                      <th scope="col" data-sort="program-college">College</th>
+                      <th scope="col">Start Date</th>
+                      <th scope="col" data-sort="program-end-date">
+                        End Date
+                      </th>
+                      <th scope="col">Tuition Fee (EST)</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="list" id="application-list">
+                    <tr>
+                      <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                          <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg"/>
+                        </a>
+                        <div class="media-body">
+                          <span class="name mb-0 text-sm">Computer Programming</span>
+                        </div>
+                      </div>
+                      </th>
+                      <td class="country">Canada</td>
+                      <td>
+                      
+                        <!-- <i class="bg-warning"></i> -->
+                        <span class="status">Seneca Polytechnic</span>
+                      
+                      </td>
+                      <td>
+                        <span class="start-date">2021-09-01</span>
+                      </td>
+                      <td>
+                        <span class="end-date">2023-05-01</span>
+                      </td>
+                      <td>
+                        <span class="tuition-fee">$15,000</span>
+                      </td>
+                      <td class="status">
+                        <span class="badge badge-dot mr-3">
+                        <i class="bg-cyan"></i>
+                        <span class="status">Applied</span>
+                        </span>
+                      </td>
+                    </tr>
+
+                    
+                    <tr>
+                      <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                          <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg"/>
+                        </a>
+                        <div class="media-body">
+                          <span class="name mb-0 text-sm">Computer Programming</span>
+                        </div>
+                      </div>
+                      </th>
+                      <td class="country">Canada</td>
+                      <td>
+                      <span class="badge badge-dot mr-4">
+                        <!-- <i class="bg-warning"></i> -->
+                        <span class="status">Seneca Polytechnic</span>
+                      </span>
+                      </td>
+                      <td>
+                        <span class="start-date">2021-09-01</span>
+                      </td>
+                      <td>
+                        <span class="end-date">2023-05-01</span>
+                      </td>
+                      <td>
+                        <span class="tuition-fee">$15,000</span>
+                      </td>
+
+                      <td>
+                        <span class="badge badge-dot mr-3">
+                        <i class="bg-green"></i>
+                        <span class="status">Approved</span>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                          <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg"/>
+                        </a>
+                        <div class="media-body">
+                          <span class="name mb-0 text-sm">Computer Programming</span>
+                        </div>
+                      </div>
+                      </th>
+                      <td class="country">Canada</td>
+                      <td>
+                      <span class="badge badge-dot mr-4">
+                        <!-- <i class="bg-warning"></i> -->
+                        <span class="status">Seneca Polytechnic</span>
+                      </span>
+                      </td>
+                      <td>
+                        <span class="start-date">2021-09-01</span>
+                      </td>
+                      <td>
+                        <span class="end-date">2023-05-01</span>
+                      </td>
+                      <td>
+                        <span class="tuition-fee">$15,000</span>
+                      </td>
+
+                      <td>
+                        <span class="badge badge-dot mr-3">
+                        <i class="bg-yellow"></i>
+                        <span class="status">Draft</span>
+                        </span>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
   <div class="row">
     <div class="col-xl-8">
       <div class="card bg-default">

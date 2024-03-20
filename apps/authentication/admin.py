@@ -4,7 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from django.contrib import admin
-from home.models import SubUser
+# from home.models import SubUser
 
 # Register your models here.
-admin.site.register(SubUser)
+# admin.site.register(SubUser)

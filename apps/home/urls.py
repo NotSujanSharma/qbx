@@ -10,14 +10,22 @@ urlpatterns = [
 
     # The home page
     path('', views.index, name='home'),
-    path('create_usr/', views.create_sub_user, name='create_usr'),
-    path('get_usr/', views.get_sub_user, name='get_usr'),
-    path('delete_usr/<int:id>/', views.delete_sub_user, name='delete_usr'),
+    path('contact/', views.contact, name='contact'),
+    path('account/', views.account, name='account'),
+    path('profile/', views.profile, name='profile'),
+    path('map/', views.map, name='map' ),
+    path('programs/', views.programs, name='programs'),
+    path('chat/', views.chat, name='chat'),
+    path('application/', views.application, name='application'),
 
-    path('update_usr/', views.update_sub_user, name='update_usr'),
     path('api/get_data/', views.get_data, name='get_data'),
+    # get everything after the first slash
+    path("test/<str:page>", views.test, name="test"), 
+    path("update_user/", views.update_user, name="update_user"),
 
-    # Matches any html file
+    # admin and 404 pages
     re_path(r'^.*\.*', views.pages, name='pages'),
+
+    
 
 ]

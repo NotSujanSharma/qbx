@@ -45,7 +45,7 @@
     
   }
   .available-programs > .card{
-    height: 30vh;
+    height: max-content;
     width:97%;
 
     /* border:1px solid #1048a9; */
@@ -56,14 +56,16 @@
   .available-programs > .card:hover{
     border:1px solid #1048a9;
 
-    box-shadow: 5px 5px 10px 5px #4d4d4d32;
+    /* box-shadow: 5px 5px 10px 5px #4d4d4d32; */
   }
   .program-details{
+    box-shadow:0 0 5px rgba(0, 0, 0, 0.29);
     width: 66%;
     height: 100vh;
   }
 
   .program-details > .card{
+    overflow: auto;
     height: 100vh;
   }
   .filter-programs .dropdown > button{
@@ -139,60 +141,62 @@
   <!-- Dark table -->
   <div class="row">
     <div class="col">
-      <div class="card shadow" style="background-color: #f6faff;">
+      <div class="card" style="background-color: #f6faff; box-shadow:0 0 5px rgba(0, 0, 0, 0.39);">
         <div class="card-header bg-transparent border-0">
           <div class="search-filter">
             <div class="search-programs">
               <input type="text" id="search" class="form-control search-input" placeholder="Search Programs" />  
-              <button class="btn btn-primary" id="searchBtn">Search</button>
+              <button class="btn btn-primary" id="searchBtn" onclick="getCheckedValues()">Search</button>
             </div>
             <div class="filter-programs">
               <div class="dropdown">
                 <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Location</button>
                 <div class="dropdown-content">
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Toronto</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">London</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Brampton</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Oshawa</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="location" value="ca" type="checkbox">Canada</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="location" value="au" type="checkbox">Australia</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="location" value="gb" type="checkbox">UK</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="location" value="us" type="checkbox">USA</a>
                 </div>
               </div>
-              <div class="dropdown">
-                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Program Type</button>
-                <div class="dropdown-content">
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Under Graduate</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Post Graduate</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">Masters</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input type="checkbox">PHD</a>
-                </div>
-              </div>
-              <div class="dropdown">
-                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Intake</button>
-                <div class="dropdown-content">
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2024 Summer</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2024 Fall</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2025 Winter</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">2025 Summer</a>
-                </div>
-              </div>
-              <div class="dropdown">
+               <div class="dropdown">
                 <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">Tuition Fee</button>
                 <div class="dropdown-content">
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">0 - $10,000</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">$10,000 - $20,000</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">$20,000 - $25,000</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">$25,000 +</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="fees" value="%3A10000" type="checkbox">0 - $10,000</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="fees" value="10000%3A20000" type="checkbox">$10,000 - $20,000</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="fees" value="20000%3A30000" type="checkbox">$20,000 - $23,000</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="fees" value="30000%3A" type="checkbox">$23,000 +</a>
                 </div>
               </div>
               <div class="dropdown">
-                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down">IELTS/PTE</button>
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down" disabled>Program Type</button>
                 <div class="dropdown-content">
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">4 - 5 | 50 - 55</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">5 - 6 | 55 - 63</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">6 - 7 | 64 - 70</a>
-                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input type="checkbox">7 - 9 | 71 +</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="programType" type="checkbox">Under Graduate</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="programType" type="checkbox">Post Graduate</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="programType" type="checkbox">Masters</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'program')"><input name="programType" type="checkbox">PHD</a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down" disabled>Intake</button>
+                <div class="dropdown-content">
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="intake" type="checkbox">2024 Summer</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="intake" type="checkbox">2024 Fall</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="intake" type="checkbox">2025 Winter</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="intake" type="checkbox">2025 Summer</a>
+                </div>
+              </div>
+             
+              <div class="dropdown">
+                <button onclick="toggleDropdown(this)" class="dropbtn btn  btn-drop-down" disabled>IELTS/PTE</button>
+                <div class="dropdown-content">
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="ieltspte" type="checkbox">4 - 5 | 50 - 55</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="ieltspte" type="checkbox">5 - 6 | 55 - 63</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="ieltspte" type="checkbox">6 - 7 | 64 - 70</a>
+                  <a href="#" class="checkbox-container"  onclick="updateSelection(this, 'intake')"><input name="ieltspte" type="checkbox">7 - 9 | 71 +</a>
                 </div>
               </div>
               <!-- clear button -->
+              <!-- <button class="btn btn-primary" id="clearBtn" onclick="getCheckedValues()">Filter</button> -->
               <button class="btn btn-primary" id="clearBtn" onclick="clearFilter()">Clear</button>
 
             </div>
@@ -204,99 +208,20 @@
         <div class="program-lists">
           <div class="available-programs">
             <!-- Program lists -->
-            <div class="card" id="program-lists">
-
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
-                  </div>
-                  <div class="col-md-8">
-                    <h2>Computer Programming</h2>
-                    <h4>Seneca Polytechnic</h4>
-                    <p>Jan | Sept | March</p>
-                    <h3>$16,000 CAD / Year</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card" id="program-lists">
-
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
-                  </div>
-                  <div class="col-md-8">
-                    <h2>Computer Programming</h2>
-                    <h4>Seneca Polytechnic</h4>
-                    <p>Jan | Sept | March</p>
-                    <h3>$16,000 CAD / Year</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card" id="program-lists">
-
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
-                  </div>
-                  <div class="col-md-8">
-                    <h2>Computer Programming</h2>
-                    <h4>Seneca Polytechnic</h4>
-                    <p>Jan | Sept | March</p>
-                    <h3>$16,000 CAD / Year</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card" id="program-lists">
-
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
-                  </div>
-                  <div class="col-md-8">
-                    <h2>Computer Programming</h2>
-                    <h4>Seneca Polytechnic</h4>
-                    <p>Jan | Sept | March</p>
-                    <h3>$16,000 CAD / Year</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card" id="program-lists">
-
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img src="https://www.shutterstock.com/shutterstock/photos/589189172/display_1500/stock-vector-canada-leaf-589189172.jpg" height=90 width=80 alt="Program Image" />
-                  </div>
-                  <div class="col-md-8">
-                    <h2>Computer Programming</h2>
-                    <h4>Seneca Polytechnic</h4>
-                    <p>Jan | Sept | March</p>
-                    <h3>$16,000 CAD / Year</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
           
           <div class="program-details">
             <div class="card">
               
               <div class="card-header bg-transparent border-0">
-                <h1 class="mb-0" style="color: rgb(28, 28, 28)5">Computer Programming </h1>
-                <h2>Seneca College</h2>
+                <h1 class="mb-0" style="color: rgb(28, 28, 28)5" id="program-name">Computer Programming </h1>
+                <h2 id="school-name">Seneca College</h2>
               </div>
               <div class="card-body bg-transparent border-0">
                 <h3>Program Description</h3>
 
-                <p>
+                <p id="program-description">
                   The Computer Programming and Analysis program provides you, the student, with a thorough understanding of the business and technical environment of computer programming. You will learn the skills necessary to design, develop, and maintain software systems. You will also learn to develop and manage databases, computer networks, and websites. The program also covers the business and technical skills necessary to analyze and solve complex problems in a dynamic and fast-paced industry.
                 </p>
                 <h3>Program Details</h3>
@@ -319,9 +244,11 @@
                   </div>
                 </div>
                 <div class="card-footer bg-transparent border-0">
-                  <button class="btn btn-primary">Apply Now</button>
-
-                  </div>
+                  <form action="/application/" method="get">
+                  <input type="hidden" name="programId" id="programId">
+                  <input type="Submit" class="btn btn-primary" value="Apply" id="application-button">
+                  </form>
+                </div>
               </div>
             </div>
             
@@ -418,6 +345,7 @@
     let count = dropdownContent.querySelectorAll('input[type="checkbox"]:checked').length;
     let category = btn.textContent.replace(/\s\(.*\)/, '');
     btn.textContent = count > 0 ? `${category} (${count} selected)` : category;
+    getCheckedValues();
   }
 
   function clearFilter() {
@@ -431,5 +359,10 @@
       updateButtonText(btn);
     }
   }
+
+  
+
+
+
 </script>
 {% endblock javascripts %}
