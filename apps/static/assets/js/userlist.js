@@ -121,7 +121,7 @@ function getCheckedValues() {
   // let urldata = `${values["location"] ? `&locations=${values["location"]}` : ''}`;
   urldata += `${values["fees"] ? `&tuitions=${values["fees"]}&tuitionCurrency=USD` : ''}`;
   urldata += `${searchdata ? `&q=${searchdata}` : ''}`;
-  console.log(`urldata: ${urldata}`);
+  // console.log(`urldata: ${urldata}`);
   // createAllPrograms(1, urldata);
   test(urldata);
   return values;
