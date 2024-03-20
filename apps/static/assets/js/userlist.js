@@ -40,6 +40,27 @@ const createAllPrograms = async (currentPageIndex = 0) => {
   }
 };
 
+// const createAllPrograms = async (currentPage=1, additionalData) => { 
+//   try {
+//     var response;
+//     if (additionalData) {
+      
+//        response = await fetch(`https://www.applyboard.com:443/api/dsj/v1/pws-spa/search?sort=relevance&page%5Bnumber%5D=${currentPage}&${additionalData}`);
+//     }
+//     else {
+      
+//        response = await fetch(`https://www.applyboard.com:443/api/dsj/v1/pws-spa/search?sort=relevance&page%5Bnumber%5D=${currentPage}`);
+//     }
+//     const data = await response.json();
+//     programs = data;
+//     document.querySelector(".available-programs").innerHTML = "";
+//     programs["programs"]
+//       .forEach(createProgramList);
+//   } catch (error) {
+//     console.error("Failed to fetch users:", error);
+//   }
+// };
+
 
 function printData(element) {
   const programId = element.getAttribute("data-id");
@@ -64,7 +85,6 @@ const getProgramDetails = async (programId) => {
 
 const test = async (urlData) => {
   try {
-    // get from data
 
     const response = await fetch(`/test/${urlData}`);
     const data = await response.json();
@@ -72,10 +92,6 @@ const test = async (urlData) => {
     document.querySelector(".available-programs").innerHTML = "";
     programs["programs"]
       .forEach(createProgramList);
-  
-    // document.querySelector(".available-programs").innerHTML = "";
-    // programs["programs"]
-    //   .forEach(createProgramList);
   } catch (error) {
     console.error("Failed to fetch users:", error);
   }
@@ -84,7 +100,7 @@ const test = async (urlData) => {
 
 function getCheckedValues() {
   const checkboxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]:checked');
-  const values = {}; // Object to hold the checkbox values
+  const values = {}; 
 
   checkboxes.forEach(checkbox => {
     const name = checkbox.name;
@@ -102,8 +118,11 @@ function getCheckedValues() {
   }
   let searchdata = document.getElementById('search').value;
   let urldata = `page[number]=1${values["location"] ? `&locations=${values["location"]}` : ''}`;
+  // let urldata = `${values["location"] ? `&locations=${values["location"]}` : ''}`;
   urldata += `${values["fees"] ? `&tuitions=${values["fees"]}&tuitionCurrency=USD` : ''}`;
   urldata += `${searchdata ? `&q=${searchdata}` : ''}`;
+  console.log(`urldata: ${urldata}`);
+  // createAllPrograms(1, urldata);
   test(urldata);
   return values;
 }
